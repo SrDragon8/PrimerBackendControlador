@@ -60,5 +60,90 @@ app.post('/create', async (req, res) =>
 
 })
 
+//READ
+app.get('/get-movie/:id', async (req, res) =>{
+    try{
+        const { params : {id} } = req;
+        const moviesDB= db.collection('movies').doc(id);
+        const { _fieldsProto: { time, author, name, raiting}} = await moviesDB.get();
+
+
+        console.log('time', time.stringValue);
+
+        res.send({
+        status: 200,
+        time : time.stringValue,
+        author : author.stringValue,
+        name: name.stringValue,
+        raiting: raiting.stringValue
+    })
+    }catch(error){
+        res.send(error);
+    }finally{
+
+    }
+})
+
+//DELLETE
+app.delete('/delete-movie/:id', async(req, res)=> {
+     try{
+        const { params : {id} } = req;
+        const movieDB= db.collection('movies').doc(id);
+        await movieDB.delete();
+
+        res.send({
+        status: 200,
+    })
+    }catch(error){
+        res.send(error);
+    }
+});
+
+
+
+//Update
+
+app.put('/update-movie', async (req, res) => 
+{
+    try {   
+        const { body: movie } = req;
+        const { id, time, author, name, raiting} = movie;
+        const movieDB = db.collection('movies').doc(id);
+        movieDB.update({
+            name,
+            time,
+            raiting,
+            author
+        });
+
+        res.send({
+            status: 200,
+            id,
+        });
+    }catch (error){
+        res.send(error);
+    }
+
+})
+
+
+//get movies
+app.get('/get-movies', async (req, res) => 
+{
+    try{
+        const moviesDB= await db.collection('movies').get();
+        const resp = moviesDB.docs.map(doc =>doc.data());
+
+        //en lugar de traer solo uno trae todos
+        res.send({
+        resp
+    })
+    }catch(error){
+        res.send(error);
+    }finally{
+
+    }
+})
+
 // Tell app to listen for new cals and sleep when none are arriving
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`)); /* se queda dormida hasta que una request llegue, despues de terminar vuelve a dormir */
