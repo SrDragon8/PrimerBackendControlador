@@ -9,7 +9,7 @@ const Movie = new Schema(
     {
     name: {type : String, required: true },
     time: {time: [String], required: true},
-    rating: {rating: Number, required: true},
+    raiting: {raiting: Number, required: true},
     },
     {timestamps: true } /* la fecha de modificacion o agregado */
 );
