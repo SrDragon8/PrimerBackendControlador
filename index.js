@@ -22,6 +22,11 @@ const moviesDB = db.collection('movies');
 const app = express();
 const apiPort = 3003;
 
+//Creating swagger
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger_output.json')
+
+
 //Setting up express app
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());  /* decirle al navegador que es seguro y se encarga corps */
@@ -41,6 +46,28 @@ app.get('/', (req, res) =>
 //create es el path
 app.post('/create', async (req, res) => 
 {
+    /*  #swagger.parameters['obj'] = {
+                in: 'body',
+                description: 'Structure of movie to be created. This doesn\'t need to have an id yet as the db will be generating it for us',
+                schema: {
+                    $name: 'Avatar',
+                    $author: 'James Cameron',
+                    time: ['20:00', '22:00'],
+                    rating: 5.00
+                }
+        }
+        #swagger.responses[200] = {
+                description: 'Movie successfully obtained.',
+                schema: { $ref: '#/definitions/Movie' }
+        }
+        #swagger.responses[500] = {
+                description: 'Error.',
+                schema: { $ref: '#/definitions/GenericError' }
+        }
+        #swagger.produces = ['application/json']
+        #swagger.consumes = ['application/json']
+        */
+
     try {    //el (1) es el id
         const { body: movie } = req;
         const moviesDB = db.collection('movies');
@@ -144,6 +171,8 @@ app.get('/get-movies', async (req, res) =>
 
     }
 })
+
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // Tell app to listen for new cals and sleep when none are arriving
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`)); /* se queda dormida hasta que una request llegue, despues de terminar vuelve a dormir */

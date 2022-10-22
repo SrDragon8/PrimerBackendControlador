@@ -1,0 +1,202 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "REST API",
+    "description": ""
+  },
+  "host": "",
+  "basePath": "",
+  "tags": [
+    {
+      "name": "",
+      "description": ""
+    }
+  ],
+  "schemes": [],
+  "securityDefinitions": {},
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/create": {
+      "post": {
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Structure of movie to be created. This doesn't need to have an id yet as the db will be generating it for us",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Avatar"
+                },
+                "author": {
+                  "type": "string",
+                  "example": "James Cameron"
+                },
+                "time": {
+                  "type": "array",
+                  "example": [
+                    "20:00",
+                    "22:00"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "rating": {
+                  "type": "number",
+                  "example": 5
+                }
+              },
+              "required": [
+                "name",
+                "author"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie successfully obtained.",
+            "schema": {
+              "$ref": "#/definitions/Movie"
+            }
+          },
+          "500": {
+            "description": "Error.",
+            "schema": {
+              "$ref": "#/definitions/GenericError"
+            }
+          }
+        }
+      }
+    },
+    "/get-movie/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/delete-movie/{id}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/update-movie": {
+      "put": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/get-movies": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Movie": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "d95a20b5-e63c-4570-bd85-7df0b93e218e"
+        },
+        "name": {
+          "type": "string",
+          "example": "Avatar"
+        },
+        "author": {
+          "type": "string",
+          "example": "James Cameron"
+        },
+        "time": {
+          "type": "array",
+          "example": [
+            "20:00",
+            "22:00"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "rating": {
+          "type": "number",
+          "example": 5
+        }
+      },
+      "required": [
+        "name",
+        "author"
+      ]
+    },
+    "GenericError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "number",
+          "example": 500
+        },
+        "error": {
+          "type": "string",
+          "example": "Reason for error"
+        }
+      }
+    }
+  }
+}
